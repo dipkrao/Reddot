@@ -10,6 +10,7 @@ import {
     TextInput,
     FlatList,
     StatusBar,
+    Alert 
 } from 'react-native';
 import Images from '../../constants/images'
 import Icons from '../../constants/icons'
@@ -20,36 +21,23 @@ import { LoginButton, AccessToken } from 'react-native-fbsdk';
 export default function Login() {
     const navigation = useNavigation();
 
-    auth()
-    .createUserWithEmailAndPassword('jane.doe@example.com', 'SuperSecretPassword!')
-    .then(() => {
-      console.log('User account created & signed in!');
-    })
-    .catch(error => {
-      if (error.code === 'auth/email-already-in-use') {
-        console.log('That email address is already in use!');
-      }
-  
-      if (error.code === 'auth/invalid-email') {
-        console.log('That email address is invalid!');
-      }
-  
-      console.error(error);
-    });
+    
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
 
-    _signIn = async () => {
+    const onLoginPress = () => {
         try {
-          await GoogleSignin.hasPlayServices();
-          const {accessToken, idToken} = await GoogleSignin.signIn();
-          setloggedIn(true);
-          const credential = auth.GoogleAuthProvider.credential(
-            idToken,
-            accessToken,
-          );
-          await auth().signInWithCredential(credential);
-        } catch (error) {
-
-        }}
+            auth(). signInWithEmailAndPassword(email, password).then((response) => {
+           console.log('response')
+           console.log(response)
+           console.log('response')
+                navigation.navigate('BottomTabBarNavigator')
+            })
+        } 
+        catch (error) {
+            alert('Something went wrong!');
+        }
+    };
 
     return (
         <View style={styles.container}>
@@ -67,24 +55,26 @@ export default function Login() {
                             keyboardType="email-address"
                             placeholder="Email"
                             placeholderTextColor="#9D9FA0"
-                            maxLength={10} />
+                            onChangeText={(text) => setEmail(text)}
+                            value={email}/>
                     </View>
 
                     {/* Password Text input */}
                     <View style={styles.SectionStyle}>
                         <Image source={Icons.passwordicon} style={styles.inputiconStyle}></Image>
                         <TextInput width={'100%'}
-                            name="phone"
+                            name="password"
                             keyboardType="visible-password"
                             placeholder="Password"
                             placeholderTextColor="#9D9FA0"
-                            maxLength={10} />
+                            onChangeText={(text) => setPassword(text)}
+                            value={password} />
                     </View>
 
                 </View>
 
                 <View style={{ justifyContent: 'center', alignSelf: 'center', paddingTop: 10, paddingHorizontal: 20 }}>
-                    <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+                    <TouchableOpacity onPress={() => onLoginPress()}>
                         <View style={styles.buttoncontainerstyle}>
                             <Text style={styles.buttonstyle}>
                                 Log In

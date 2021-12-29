@@ -11,6 +11,7 @@ import {
     FlatList,
     StatusBar,
     Linking,
+    Alert 
 } from 'react-native';
 import Images from '../../constants/images'
 import Icons from '../../constants/icons'
@@ -27,9 +28,14 @@ export default function SignUp() {
     // SIGNUP CODE
     const createUser = (email, password) => {
         try {
-            auth().createUserWithEmailAndPassword(email, password);
+            auth().createUserWithEmailAndPassword(email, password).then((response) => {
+                console.log('response')
+                console.log(response)
+                console.log('response')
+                     navigation.navigate('BottomTabBarNavigator')
+                 })
         } catch (error) {
-            alert(error);
+            Alert.alert(error);
         }
     };
 
